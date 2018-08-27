@@ -14,7 +14,11 @@
       (send json-hierlist set-json! jsexpr))
 
     (super-new)
-    (set! path-bar (new json-path-view% [parent this] [callback identity]))
-    (set! json-hierlist (new json-hierlist% [parent this]
+    (set! path-bar (new json-path-view%
+                        [parent this]
+                        [callback (lambda (path)
+                                    (send json-hierlist select-path path))]))
+    (set! json-hierlist (new json-hierlist%
+                             [parent this]
                              [on-item-select (lambda (path)
                                                (send path-bar set-path! path))]))))

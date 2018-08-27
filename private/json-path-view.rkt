@@ -1,5 +1,7 @@
 #lang racket/gui
 
+(require "node-data.rkt")
+
 (provide json-path-view%)
 
 (define json-path-view%
@@ -9,26 +11,24 @@
     (define editor (new text%))
     
     ;; Private methods
-    (define/private (add-path-button label-and-path)
-      (define label (car label-and-path))
-      (define path  (cdr label-and-path))
+    (define/private (add-path-button label path)
       (define start (send editor last-position))
       (send editor insert label)
       (send editor set-clickback start (send editor last-position)
             (λ (t s e) (callback path))))
     
     (define/private (insert-path-separator)
-      (send editor insert " ▶ "))
+      (send editor insert " ❯ ")) ;; ▶
     
     ;; Public methods
-    (define/public (set-path! path)
-      (define first #t)
+    (define/public (set-path! data)
+      (define path (node-data-path data))      
       (send editor erase)
-      (for ([elt path])
-           (if first
-               (set! first #f)
-               (insert-path-separator))
-           (send editor insert (~a elt))))
+      (for ([elt path]
+            [count (in-naturals 1)])
+           (when (> count 1)
+             (insert-path-separator))
+           (add-path-button (~a elt) (take path count))))
     
     ;; New
     (super-new [parent parent]
