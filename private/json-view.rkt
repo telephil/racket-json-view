@@ -1,24 +1,25 @@
 #lang racket/gui
 
-(require "json-hierlist.rkt"
-         "json-path-view.rkt")
+(require breadcrumb
+         "json-hierlist.rkt"
+         "node-data.rkt")
 
 (provide json-view%)
 
 (define json-view%
   (class vertical-panel%
-    (define path-bar null)
-    (define json-hierlist null)
+    (super-new)
+
+    (define path-bar (new breadcrumb%
+                          [parent this]
+                          [callback (lambda (path)
+                                      (send json-hierlist select-path path))]))
+
+    (define json-hierlist (new json-hierlist%
+                               [parent this]
+                               [on-item-select (lambda (data)
+                                                 (send path-bar set-path!
+                                                       (node-data-path data)))]))
 
     (define/public (set-json! jsexpr)
-      (send json-hierlist set-json! jsexpr))
-
-    (super-new)
-    (set! path-bar (new json-path-view%
-                        [parent this]
-                        [callback (lambda (path)
-                                    (send json-hierlist select-path path))]))
-    (set! json-hierlist (new json-hierlist%
-                             [parent this]
-                             [on-item-select (lambda (path)
-                                               (send path-bar set-path! path))]))))
+      (send json-hierlist set-json! jsexpr))))
