@@ -74,12 +74,10 @@
       (define type (node-data-type data))
       (case type
         ((hash)
-         (define h (make-hasheq))
-         (for ((item (send node get-items)))
-              (hash-set! h
-                         (node-data-name (send item user-data))
-                         (get-json-helper item)))
-         h)
+         (for/hasheq ((item (send node get-items)))
+                     (values
+                      (node-data-name (send item user-data))
+                      (get-json-helper item))))
         ((list)
          (for/list ((item (send node get-items)))
                    (get-json-helper item #t)))
