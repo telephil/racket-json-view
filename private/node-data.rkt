@@ -2,4 +2,4 @@
 
 (provide (struct-out node-data))
 
-(struct node-data (type name path) #:transparent)
+(struct node-data (type name value path) #:transparent)

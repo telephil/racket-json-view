@@ -21,5 +21,8 @@
                                                  (send path-bar set-path!
                                                        (node-data-path data)))]))
 
+    (define/public (get-json)
+      (send json-hierlist get-json))
+    
     (define/public (set-json! jsexpr)
       (send json-hierlist set-json! jsexpr))))
