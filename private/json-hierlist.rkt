@@ -67,7 +67,7 @@
       (when item
         (on-item-select (send item user-data))))
 
-    (define/private (get-json-helper node [skip? #f])
+    (define/private (get-json-helper node)
       (define data (send node user-data))
       (define name (node-data-name data))
       (define value (node-data-value data))
@@ -80,13 +80,13 @@
                       (get-json-helper item))))
         ((list)
          (for/list ((item (send node get-items)))
-                   (get-json-helper item #t)))
+                   (get-json-helper item)))
         ((value) value)))
 
     (define/public (get-json)
       (unless root
         (error "no JSON loaded"))
-      (get-json-helper root #t))
+      (get-json-helper root))
 
     (define/public (set-json! jsexpr)
       (set! root (new-list-node this '() "object" (get-value-type jsexpr) 'index))
