@@ -60,7 +60,7 @@
                (path (reverse (cons jsexpr path))))
            (send* node
              (insert-value jsexpr)
-             (user-data (node-data 'value jsexpr #f path)))
+             (user-data (node-data 'value jsexpr jsexpr path)))
            (hash-set! node-cache path node)))))
 
     (define/override (on-select item)
@@ -79,7 +79,11 @@
         ((list)
          (for/list ((item (send node get-items)))
                    (get-json-helper item)))
-        ((value) value)))
+        ((value)
+         (node-data-value
+          (if (eq? node root) ; hack to handle the case where the tree is a single value
+              (send (car (send node get-items)) user-data)
+              data)))))
 
     (define/public (get-json)
       (unless root
