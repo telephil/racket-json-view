@@ -8,7 +8,7 @@
 
 (define json-hierlist%
   (class hierarchical-list%
-    (init-field on-item-select)
+    (init-field [on-item-select values])
     (define node-cache (make-hash))
     (define root #f)
     
@@ -69,8 +69,6 @@
 
     (define/private (get-json-helper node)
       (define data (send node user-data))
-      (define name (node-data-name data))
-      (define value (node-data-value data))
       (define type (node-data-type data))
       (case type
         ((hash)
