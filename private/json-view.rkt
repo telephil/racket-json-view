@@ -4,22 +4,23 @@
          "json-hierlist.rkt"
          "node-data.rkt")
 
-(provide json-view%)
+(provide json-view%
+         (struct-out node-data))
 
 (define json-view%
   (class vertical-panel%
     (super-new)
 
-    (define path-bar (new breadcrumb%
+    (field [path-bar (new breadcrumb%
                           [parent this]
                           [callback (lambda (path)
-                                      (send json-hierlist select-path path))]))
+                                      (send json-hierlist select-path path))])])
 
-    (define json-hierlist (new json-hierlist%
+    (field [json-hierlist (new json-hierlist%
                                [parent this]
                                [on-item-select (lambda (data)
                                                  (send path-bar set-path!
-                                                       (node-data-path data)))]))
+                                                       (node-data-path data)))])])
 
     (define/public (get-json)
       (send json-hierlist get-json))

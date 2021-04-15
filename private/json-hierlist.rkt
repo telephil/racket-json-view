@@ -10,7 +10,7 @@
   (class hierarchical-list%
     (init-field [on-item-select values])
     (define node-cache (make-hash))
-    (define root #f)
+    (field [root #f])
     
     (define/private (new-item-node parent)
       (send parent new-item json-hierlist-item-mixin))
