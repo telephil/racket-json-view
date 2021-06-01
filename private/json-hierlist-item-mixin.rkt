@@ -10,12 +10,16 @@
 
 (define (get-color-from-preference name)
   (define pref (get-preference (string->symbol (~a color-key-prefix name))))
-  (apply make-object (cons color% (seventh (hash-ref pref 'classic)))))
+  (and pref (apply make-object (cons color% (seventh (hash-ref pref 'classic))))))
 
 (define (make-style-delta style)
   (define delta (new style-delta%))
+  ; this is called many times
+  ; if this is skipped then nothing renders
+  (define foreground (get-color-from-preference style))
+  (when foreground
+    (send delta set-delta-foreground foreground))
   (send* delta
-    (set-delta-foreground (get-color-from-preference style))
     (set-face (get-preference font-name-key))
     (set-size-add (vector-ref (get-preference font-size-key) 1))
     (set-size-mult 0))
