@@ -10,7 +10,9 @@
 
 (define (get-color-from-preference name)
   (define pref (get-preference (string->symbol (~a color-key-prefix name))))
-  (and pref (apply make-object (cons color% (seventh (hash-ref pref 'classic))))))
+  (and pref
+       (hash-has-key? pref 'classic)
+       (apply make-object (cons color% (seventh (hash-ref pref 'classic))))))
 
 (define (make-style-delta style)
   (define delta (new style-delta%))
