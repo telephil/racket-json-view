@@ -23,7 +23,9 @@
     (send delta set-delta-foreground foreground))
   (send* delta
     (set-face (get-preference font-name-key))
-    (set-size-add (vector-ref (get-preference font-size-key) 1))
+    (set-size-add
+     (let ([fsk (get-preference font-size-key)])
+       (or (and fsk (vector-ref fsk 1)) 14)))
     (set-size-mult 0))
   delta)
 
