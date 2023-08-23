@@ -1,7 +1,7 @@
 #lang racket/gui
 
 (require json
-         "json-view.rkt")
+         "private/json-view.rkt")
 
 (define sample
 #<<EOF
